@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:19-jdk
+      - image: circleci/openjdk:17-jdk
 
     working_directory: ~/repo
     environment:
@@ -29,4 +29,4 @@ jobs:
 
       - run:
           name: Send to CodeCov
-          command: bash <(curl -s https://codecov.io/bash
+          command: bash <(curl -s https://codecov.io/bash)
