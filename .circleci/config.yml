@@ -2,7 +2,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: openjdk:17-jdk
+#      - image: openjdk:17-jdk
+      - image: circleci/openjdk:11
 
     working_directory: ~/repo
     environment:
@@ -15,6 +16,8 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "pom.xml" }}
             - v1-dependencies
+
+#      - run: apt-get install mvn
 
       - run: mvn dependency:go-offline
 

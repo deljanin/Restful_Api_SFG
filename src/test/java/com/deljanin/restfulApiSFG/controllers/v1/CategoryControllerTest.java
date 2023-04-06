@@ -1,6 +1,7 @@
 package com.deljanin.restfulApiSFG.controllers.v1;
 
 import com.deljanin.restfulApiSFG.api.v1.model.CategoryDTO;
+import com.deljanin.restfulApiSFG.exceptions.ResourceNotFoundException;
 import com.deljanin.restfulApiSFG.services.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,9 @@ class CategoryControllerTest {
     MockMvc mockMvc;
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
+                    .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                    .build();
 
     }
 
@@ -57,22 +60,30 @@ class CategoryControllerTest {
 
 
         mockMvc.perform(get("/api/v1/categories/")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.categories", hasSize(2)));
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.categories", hasSize(2)));
     }
 
     @Test
-    public void testGetByNameCategories() throws Exception {
+    public void getCategoriesByName() throws Exception {
         CategoryDTO category1 = new CategoryDTO();
-        category1.setId(1l);
+        category1.setId(1L);
         category1.setName(NAME);
 
         when(categoryService.getCategoryByName(anyString())).thenReturn(category1);
 
         mockMvc.perform(get("/api/v1/categories/Jim")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo(NAME)));
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name", equalTo(NAME)));
+    }
+
+    @Test
+    void getByNameNotFoundException() throws Exception {
+        when(categoryService.getCategoryByName(anyString())).thenThrow(ResourceNotFoundException.class);
+        mockMvc.perform(get(CategoryController.BASE_URL + "/BroNotPresent")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
     }
 }
