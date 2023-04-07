@@ -58,7 +58,7 @@ class CustomerControllerTest {
 
         when(customerService.getAllCustomers()).thenReturn(customers);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customers/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customers")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.customers", hasSize(2)));
