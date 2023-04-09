@@ -6,7 +6,7 @@ import com.deljanin.restfulApiSFG.bootstrap.Bootstrap;
 import com.deljanin.restfulApiSFG.domain.Customer;
 import com.deljanin.restfulApiSFG.repositories.CategoryRepository;
 import com.deljanin.restfulApiSFG.repositories.CustomerRepository;
-
+import com.deljanin.restfulApiSFG.repositories.VendorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +26,15 @@ public class CustomerServiceImplIT {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    VendorRepository vendorRepository;
+
     CustomerService customerService;
 
     @BeforeEach
     void setUp() throws Exception {
         System.out.println("Loading customers data. \n " + customerRepository.findAll().size());
-        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
         bootstrap.run();
 
         customerService = new CustomerServiceImpl(CustomerMapper.INSTANCE, customerRepository);
