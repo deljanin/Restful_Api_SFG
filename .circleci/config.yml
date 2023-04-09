@@ -40,8 +40,5 @@ jobs:
 #      - store_artifacts:
 #          path: target
 
-      - setupCodeCov:
-          steps:
-            - run: curl -Os https://uploader.codecov.io/latest/linux/codecov
-            - run: chmod +x codecov
-            - run: ./codecov -t 7b1f26a2-f466-4832-9038-234271c5ab95 -s target
+
+      - run: curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -t 7b1f26a2-f466-4832-9038-234271c5ab95 -s target
