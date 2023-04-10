@@ -55,7 +55,7 @@ class VendorControllerTest {
 
         when(vendorService.getAllVendors()).thenReturn(vendors);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/vendors")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/vendors/getAll")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.vendors", hasSize(2)));
@@ -66,7 +66,7 @@ class VendorControllerTest {
         VendorDTO vendor = new VendorDTO(NAME, URL);
         when(vendorService.getVendorById(anyLong())).thenReturn(vendor);
 
-        mockMvc.perform(get(URL)
+        mockMvc.perform(get("/api/v1/vendors/get/2")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.name", equalTo(NAME)))
@@ -86,7 +86,7 @@ class VendorControllerTest {
 
         when(vendorService.createNewVendor(vendorDTO)).thenReturn(returnDTO);
 
-        mockMvc.perform(post("/api/v1/vendors")
+        mockMvc.perform(post("/api/v1/vendors/createNew")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(vendorDTO)))
                         .andExpect(status().isCreated())
@@ -105,7 +105,7 @@ class VendorControllerTest {
 
         when(vendorService.patchVendor(anyLong(), any(VendorDTO.class))).thenReturn(returnDTO);
 
-        mockMvc.perform(patch(URL)
+        mockMvc.perform(patch("/api/v1/vendors/fix/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(vendorDTO)))
                         .andExpect(status().isOk())
@@ -116,7 +116,7 @@ class VendorControllerTest {
 
     @Test
     void deleteVendor() throws Exception {
-        mockMvc.perform(delete(URL)
+        mockMvc.perform(delete("/api/v1/vendors/delete/2")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk());
 
